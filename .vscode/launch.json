@@ -18,9 +18,9 @@
 			"projectName": "ISIS4208-Grafos_fa2aa5cf",
 			"args": [
 				"<",
-				"${workspaceFolder}/Problema5.in",
+				"${workspaceFolder}/problema5/Problema5.in",
 				">",
-				"${workspaceFolder}/Problema5.out"
+				"${workspaceFolder}/problema5/Problema5.out"
 			]
 		}
 	]
