@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Problema5 {
 
@@ -28,14 +29,6 @@ public class Problema5 {
 
         public int getCost() {
             return cost;
-        }
-
-        public int getOther(int pFirst) {
-            if (first == pFirst) {
-                return second;
-            } else {
-                return first;
-            }
         }
 
         @Override
@@ -97,15 +90,23 @@ public class Problema5 {
             instance = pInstance;
         }
 
-        public IntTriple[] kruskalMST(int n, IntTriple[] ejes) {
+        /**
+         * 
+         * calcula el MST para un grafo no dirigido cualquiera
+         * 
+         * @param n    cantidad de vertices del grafo
+         * @param ejes arreglo de ejes del grafo
+         * @return arreglo de ejes que componen un MST
+         */
+        public IntTriple[] kruskalMSTGeneral(int n, IntTriple[] ejes) {
 
             IntTriple current;
             int v1;
             int v2;
             Partition disyuntos = instance.new Partition(n);
-            ArrayList<IntTriple> mst = new ArrayList<IntTriple>(); // Arraylist porque el grafo puede ser desconectado
+            LinkedList<IntTriple> mst = new LinkedList<IntTriple>(); // Arraylist porque el grafo puede ser desconectado
             Arrays.sort(ejes);
-            int i = 0;// contar ejes
+            int i = 0; // contar ejes
             for (; i < ejes.length;) {
                 current = ejes[i];
                 v1 = current.getFirst();
@@ -119,6 +120,39 @@ public class Problema5 {
             IntTriple[] mstArray = mst.toArray(new IntTriple[0]);
             return mstArray;
         }
+
+        /**
+         * 
+         * calcula el MST para un grafo no dirigido conectado
+         * 
+         * @param n    cantidad de vertices del grafo
+         * @param ejes arreglo de ejes del grafo
+         * @return arreglo de ejes que componen un MST
+         */
+        public IntTriple[] kruskalMSTConnected(int n, IntTriple[] ejes) {
+
+            IntTriple current;
+            int v1;
+            int v2;
+            Partition disyuntos = instance.new Partition(n);
+            IntTriple[] mst = new IntTriple[n - 1];
+            Arrays.sort(ejes);
+            int i = 0; // contar ejes
+            int j = 0; // contar ejes agregados al mst
+            for (; j < mst.length;) {
+                current = ejes[i];
+                v1 = current.getFirst();
+                v2 = current.getSecond();
+                if (!disyuntos.sameSubset(v1, v2)) {
+                    disyuntos.union(v1, v2);
+                    mst[j] = current;
+                    j++;
+                }
+                i++;
+            }
+
+            return mst;
+        }
     }
 
     public static void main(String[] args) {
@@ -126,7 +160,10 @@ public class Problema5 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line = "";
         try {
-            int n = Integer.parseInt(br.readLine());
+            // de la forma '\d+ (D|C)' con D = diesconectado y C = conectado
+            String[] firstLine = br.readLine().split(" ");
+            int n = Integer.parseInt(firstLine[0]);
+            boolean isConnected = firstLine[1].equals("C");
             ArrayList<IntTriple> ejes = new ArrayList<IntTriple>();
             while (!((line = br.readLine()).equals("0"))) {
                 String[] edge = line.split(" ");
@@ -138,7 +175,8 @@ public class Problema5 {
             }
             Kruskal kruskal = instance.new Kruskal(instance);
             IntTriple[] ejesArray = ejes.toArray(new IntTriple[0]);
-            IntTriple[] mst = kruskal.kruskalMST(n, ejesArray);
+            IntTriple[] mst = (isConnected) ? kruskal.kruskalMSTConnected(n, ejesArray)
+                    : kruskal.kruskalMSTGeneral(n, ejesArray);
             for (int i = 0; i < mst.length; i++) {
                 System.out.println(mst[i].getFirst() + " " + mst[i].getSecond() + " " + mst[i].getCost());
             }
