@@ -42,7 +42,7 @@ public class Tarea2 {
      * @param matrizAdyacencia el grafo dirigido con la superfuente y el
      *                         superdestino
      * @param camino           el camino por el que se envía flujo
-     * @return
+     * @return int[][] el grafo residual resultante
      */
     public static int[][] darGrafoResidual(int[][] matrizAdyacencia, Iterable<DirectedIntPair> camino) {
         // copiar el grafo original
