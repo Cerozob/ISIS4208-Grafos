@@ -28,3 +28,33 @@ with open("Problema5.in", "w+") as f:
             if costNumber is not None:
                 f.write(f"{i} {j} {costNumber}\n")
     f.write("0")
+
+
+def binarysearch(list,n):
+    # asume que esta ordenada
+    encontrado = None
+    j = int(len(list)/2)
+    while encontrado is not None:
+        if list[j] == n:
+            return True
+        elif list[j] > n:
+            j = int(j//2)
+        else:
+            j += int(j//2)
+
+        if j == 0 or j == len(list):
+            return False 
+
+
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n*factorial(n-1)
+
+
+def fibonacci(n):
+    if n < 2:
+        return n
+    else:
+        return fibonacci(n-1)+fibonacci(n-2)
